@@ -1,5 +1,3 @@
-// app/components/PositionList/PositionItem.jsx
-
 import React from "react";
 import PartialExitForm from "../PartialExitForm/PartialExitForm";
 import styles from "./PositionItem.module.css";
@@ -11,7 +9,9 @@ export default function PositionItem({
   updatePositions,
   leverage,
   deletePosition,
+  updateUsedMargin, // 사용된 마진 업데이트 함수 추가
 }) {
+  // 포지션 손익 계산
   const calculatePositionPnL = () => {
     let totalPnL = 0;
     position.partialExits.forEach((exit) => {
@@ -21,6 +21,7 @@ export default function PositionItem({
     return totalPnL;
   };
 
+  // 분할 청산 삭제
   const deletePartialExit = (exitIndex) => {
     const updatedPositions = [...positions];
     const currentPosition = updatedPositions[index];
@@ -28,6 +29,9 @@ export default function PositionItem({
 
     // remainingAmount를 복구
     currentPosition.remainingAmount += exit.amount + exit.fee;
+
+    // 사용된 마진 업데이트
+    updateUsedMargin(-(exit.amount + exit.fee));
 
     // partialExits에서 해당 청산 제거
     currentPosition.partialExits.splice(exitIndex, 1);
@@ -40,6 +44,7 @@ export default function PositionItem({
     updatePositions(updatedPositions);
   };
 
+  // 분할 청산 처리
   const handlePartialExit = (exitPrice, exitPercentage) => {
     const updatedPositions = [...positions];
     const currentPosition = updatedPositions[index];
@@ -68,7 +73,7 @@ export default function PositionItem({
       price: exitPrice,
       amount: netExitAmount,
       fee,
-      pnl, // PNL 추가
+      pnl,
     });
 
     // 남은 금액이 0이면 포지션 종료
@@ -77,6 +82,13 @@ export default function PositionItem({
     }
 
     updatePositions(updatedPositions);
+  };
+
+  // 포지션 삭제
+  const handleDeletePosition = () => {
+    // 사용된 마진 업데이트
+    updateUsedMargin(-position.margin);
+    deletePosition(index);
   };
 
   return (
@@ -91,10 +103,7 @@ export default function PositionItem({
 
       <PartialExitForm onPartialExit={handlePartialExit} />
 
-      <button
-        className={styles.deleteButton}
-        onClick={() => deletePosition(index)}
-      >
+      <button className={styles.deleteButton} onClick={handleDeletePosition}>
         포지션 삭제
       </button>
 

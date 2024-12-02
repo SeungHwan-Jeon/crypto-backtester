@@ -67,6 +67,10 @@ export default function Home() {
     setUsedMargin(newUsedMargin);
   };
 
+  const updateUsedMargin = (delta) => {
+    setUsedMargin((prev) => prev + delta);
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>가상화폐 백테스트 계산기</h1>
@@ -83,6 +87,7 @@ export default function Home() {
         positions={positions}
         updatePositions={updatePositions}
         leverage={leverage}
+        updateUsedMargin={updateUsedMargin}
       />
       <TotalPnL
         positions={positions}

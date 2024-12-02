@@ -6,14 +6,21 @@ import styles from "./PositionList.module.css";
 
 // 추가된 부분을 강조하여 표시
 
-export default function PositionList({ positions, updatePositions, leverage }) {
+export default function PositionList({
+  positions,
+  updatePositions,
+  leverage,
+  updateUsedMargin,
+}) {
   // 포지션 분류
   const openPositions = positions.filter((position) => !position.isClosed);
   const closedPositions = positions.filter((position) => position.isClosed);
 
   const deletePosition = (index) => {
+    const positionToDelete = positions[index];
     const updatedPositions = positions.filter((_, i) => i !== index);
     updatePositions(updatedPositions);
+    updateUsedMargin(-positionToDelete.margin);
   };
 
   return (
@@ -33,6 +40,7 @@ export default function PositionList({ positions, updatePositions, leverage }) {
             updatePositions={updatePositions}
             leverage={leverage}
             deletePosition={deletePosition}
+            updateUsedMargin={updateUsedMargin}
           />
         ))
       )}
@@ -49,6 +57,8 @@ export default function PositionList({ positions, updatePositions, leverage }) {
               positions={positions}
               updatePositions={updatePositions}
               leverage={leverage}
+              deletePosition={deletePosition}
+              updateUsedMargin={updateUsedMargin}
             />
           ))}
         </div>
