@@ -11,6 +11,11 @@ export default function PositionList({ positions, updatePositions, leverage }) {
   const openPositions = positions.filter((position) => !position.isClosed);
   const closedPositions = positions.filter((position) => position.isClosed);
 
+  const deletePosition = (index) => {
+    const updatedPositions = positions.filter((_, i) => i !== index);
+    updatePositions(updatedPositions);
+  };
+
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>포지션 목록</h2>
@@ -27,6 +32,7 @@ export default function PositionList({ positions, updatePositions, leverage }) {
             positions={positions}
             updatePositions={updatePositions}
             leverage={leverage}
+            deletePosition={deletePosition}
           />
         ))
       )}

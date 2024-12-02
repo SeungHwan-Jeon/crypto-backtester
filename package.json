@@ -2,13 +2,17 @@
   "name": "crypto-backtester",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://seunghwan-jeon.github.io/crypto-backtester",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "predeploy": "npm run build",
+    "deploy": "powershell -Command \"New-Item -Path out/.nojekyll -ItemType File\" && gh-pages -d out --dotfiles",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "gh-pages": "^6.2.0",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106"

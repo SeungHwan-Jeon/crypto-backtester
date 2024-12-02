@@ -10,6 +10,7 @@ export default function PositionItem({
   positions,
   updatePositions,
   leverage,
+  deletePosition,
 }) {
   const calculatePositionPnL = () => {
     let totalPnL = 0;
@@ -70,7 +71,12 @@ export default function PositionItem({
       <p>진입 수수료: ${position.fee.toFixed(2)}</p>
 
       <PartialExitForm onPartialExit={handlePartialExit} />
-
+      <button
+        className={styles.deleteButton}
+        onClick={() => deletePosition(index)}
+      >
+        포지션 삭제
+      </button>
       {position.partialExits.length > 0 && (
         <div className={styles.exitHistory}>
           <h4 className={styles.subtitle}>청산 내역</h4>
