@@ -3,14 +3,31 @@
 import React, { useState } from "react";
 import styles from "./TradeInput.module.css";
 
-export default function TradeInput({ feeRate, addPosition }) {
+export default function TradeInput({
+  feeRate,
+  addPosition,
+  initialAsset,
+  leverage,
+  usedMargin,
+}) {
   const [tradePrice, setTradePrice] = useState(0);
   const [tradeAmount, setTradeAmount] = useState(0);
   const [positionType, setPositionType] = useState("long");
 
+  // 최대 거래 가능 금액 및 최대 마진 계산
+  const maxNotional = (initialAsset - usedMargin) * leverage;
+  const maxMargin = initialAsset - usedMargin;
+
   const handleAddPosition = () => {
-    if (tradePrice <= 0 || tradeAmount <= 0) {
-      alert("거래 가격과 거래 금액은 0보다 커야 합니다.");
+    // 필요한 마진 계산
+    const requiredMargin = tradeAmount / leverage;
+
+    if (requiredMargin > maxMargin) {
+      alert(
+        `거래 금액이 최대 가능 금액을 초과합니다. 최대 거래 가능 금액은 $${maxNotional.toFixed(
+          2
+        )}입니다.`
+      );
       return;
     }
 
@@ -25,6 +42,7 @@ export default function TradeInput({ feeRate, addPosition }) {
       partialExits: [],
       type: positionType,
       feeRate,
+      margin: requiredMargin, // 마진 추가
     };
 
     addPosition(newPosition);
@@ -64,6 +82,8 @@ export default function TradeInput({ feeRate, addPosition }) {
           onChange={(e) => setTradeAmount(Number(e.target.value))}
         />
       </div>
+      <p>최대 거래 가능 금액: ${maxNotional.toFixed(2)}</p>
+      <p>사용 가능한 자산: ${maxMargin.toFixed(2)}</p>
       <button className={styles.button} onClick={handleAddPosition}>
         포지션 추가
       </button>

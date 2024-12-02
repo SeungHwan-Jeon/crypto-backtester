@@ -16,6 +16,10 @@ export default function Home() {
   const [positions, setPositions] = useState([]);
   const [usedMargin, setUsedMargin] = useState(0);
 
+  // 가용 마진 계산
+  const maxNotional = initialAsset * leverage; // 최대 거래 가능 금액
+  const availableMargin = initialAsset - usedMargin; // 사용 가능한 자산
+
   // 데이터 로드 및 저장 로직은 동일합니다.
   useEffect(() => {
     const savedData = localStorage.getItem("backtesterData");
@@ -38,12 +42,29 @@ export default function Home() {
     localStorage.setItem("backtesterData", JSON.stringify(dataToSave));
   }, [initialAsset, leverage, feeRate, positions]);
 
+  // 포지션 추가 시 사용된 마진 업데이트
   const addPosition = (newPosition) => {
     setPositions([...positions, newPosition]);
+    setUsedMargin((prev) => prev + newPosition.margin); // 사용된 마진 업데이트
   };
 
-  const updatePositions = (updatedPositions) => {
+  // 포지션 삭제 시 사용된 마진 업데이트
+  const deletePosition = (index) => {
+    const positionToDelete = positions[index];
+    const updatedPositions = positions.filter((_, i) => i !== index);
     setPositions(updatedPositions);
+    setUsedMargin((prev) => prev - positionToDelete.margin); // 사용된 마진 감소
+  };
+
+  // 포지션 업데이트 함수도 업데이트
+  const updatePositions = (updatedPositions) => {
+    // 사용된 마진 재계산
+    const newUsedMargin = updatedPositions.reduce(
+      (acc, position) => acc + position.margin,
+      0
+    );
+    setPositions(updatedPositions);
+    setUsedMargin(newUsedMargin);
   };
 
   return (
@@ -68,6 +89,7 @@ export default function Home() {
         leverage={leverage}
         initialAsset={initialAsset}
       />
+      ;
     </div>
   );
 }
