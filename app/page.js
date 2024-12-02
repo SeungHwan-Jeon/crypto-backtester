@@ -14,6 +14,7 @@ export default function Home() {
   const [leverage, setLeverage] = useState(1);
   const [feeRate, setFeeRate] = useState(0.1);
   const [positions, setPositions] = useState([]);
+  const [usedMargin, setUsedMargin] = useState(0);
 
   // 데이터 로드 및 저장 로직은 동일합니다.
   useEffect(() => {

@@ -21,6 +21,25 @@ export default function PositionItem({
     return totalPnL;
   };
 
+  const deletePartialExit = (exitIndex) => {
+    const updatedPositions = [...positions];
+    const currentPosition = updatedPositions[index];
+    const exit = currentPosition.partialExits[exitIndex];
+
+    // remainingAmount를 복구
+    currentPosition.remainingAmount += exit.amount + exit.fee;
+
+    // partialExits에서 해당 청산 제거
+    currentPosition.partialExits.splice(exitIndex, 1);
+
+    // 포지션 상태 업데이트
+    if (currentPosition.remainingAmount > 0) {
+      currentPosition.isClosed = false;
+    }
+
+    updatePositions(updatedPositions);
+  };
+
   const handlePartialExit = (exitPrice, exitPercentage) => {
     const updatedPositions = [...positions];
     const currentPosition = updatedPositions[index];
@@ -71,12 +90,14 @@ export default function PositionItem({
       <p>진입 수수료: ${position.fee.toFixed(2)}</p>
 
       <PartialExitForm onPartialExit={handlePartialExit} />
+
       <button
         className={styles.deleteButton}
         onClick={() => deletePosition(index)}
       >
         포지션 삭제
       </button>
+
       {position.partialExits.length > 0 && (
         <div className={styles.exitHistory}>
           <h4 className={styles.subtitle}>청산 내역</h4>
@@ -99,6 +120,14 @@ export default function PositionItem({
                   <td>{exit.amount.toFixed(2)}</td>
                   <td>{exit.fee.toFixed(2)}</td>
                   <td>{exit.pnl.toFixed(2)}</td>
+                  <td>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => deletePartialExit(i)}
+                    >
+                      삭제
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
