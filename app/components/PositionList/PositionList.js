@@ -11,6 +11,7 @@ export default function PositionList({
   updatePositions,
   leverage,
   updateUsedMargin,
+  setCurrentAsset,
 }) {
   // 포지션 분류
   const openPositions = positions.filter((position) => !position.isClosed);
@@ -41,6 +42,7 @@ export default function PositionList({
             leverage={leverage}
             deletePosition={deletePosition}
             updateUsedMargin={updateUsedMargin}
+            setCurrentAsset={setCurrentAsset}
           />
         ))
       )}
@@ -59,6 +61,7 @@ export default function PositionList({
               leverage={leverage}
               deletePosition={deletePosition}
               updateUsedMargin={updateUsedMargin}
+              setCurrentAsset={setCurrentAsset}
             />
           ))}
         </div>

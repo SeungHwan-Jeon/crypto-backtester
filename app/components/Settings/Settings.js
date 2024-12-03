@@ -1,15 +1,13 @@
-// app/components/Settings/Settings.jsx
-
 import React from "react";
 import styles from "./Settings.module.css";
 
 export default function Settings({
   initialAsset,
   setInitialAsset,
-  leverage,
-  setLeverage,
-  feeRate,
-  setFeeRate,
+  isTrading,
+  startTrading,
+  resetSettings,
+  stopTrading,
 }) {
   return (
     <div className={styles.card}>
@@ -21,25 +19,22 @@ export default function Settings({
           className={styles.input}
           value={initialAsset}
           onChange={(e) => setInitialAsset(Number(e.target.value))}
+          disabled={isTrading}
         />
       </div>
-      <div className={styles.formGroup}>
-        <label className={styles.label}>레버리지</label>
-        <input
-          type="number"
-          className={styles.input}
-          value={leverage}
-          onChange={(e) => setLeverage(Number(e.target.value))}
-        />
-      </div>
-      <div className={styles.formGroup}>
-        <label className={styles.label}>수수료율 (%)</label>
-        <input
-          type="number"
-          className={styles.input}
-          value={feeRate}
-          onChange={(e) => setFeeRate(Number(e.target.value))}
-        />
+      <div className={styles.buttonGroup}>
+        {!isTrading ? (
+          <button className={styles.startButton} onClick={startTrading}>
+            거래 시작
+          </button>
+        ) : (
+          <button className={styles.stopButton} onClick={stopTrading}>
+            거래 중지
+          </button>
+        )}
+        <button className={styles.resetButton} onClick={resetSettings}>
+          초기화
+        </button>
       </div>
     </div>
   );

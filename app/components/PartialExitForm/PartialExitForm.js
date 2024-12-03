@@ -8,10 +8,16 @@ export default function PartialExitForm({ onPartialExit }) {
   const [exitPercentage, setExitPercentage] = useState(0);
 
   const handleSubmit = () => {
-    if (exitPrice <= 0 || exitPercentage <= 0 || exitPercentage > 100) {
-      alert("유효한 청산 가격과 퍼센트를 입력하세요.");
+    if (exitPrice <= 0) {
+      alert("청산 가격은 0보다 커야 합니다.");
       return;
     }
+
+    if (exitPercentage <= 0 || exitPercentage > 100) {
+      alert("청산 퍼센트는 0보다 크고 100 이하여야 합니다.");
+      return;
+    }
+
     onPartialExit(exitPrice, exitPercentage);
     setExitPrice(0);
     setExitPercentage(0);

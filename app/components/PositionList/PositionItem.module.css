@@ -6,6 +6,7 @@
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px; /* 간격 조절 */
 }
 
 .title {
@@ -99,4 +100,27 @@
 
 .deleteButton:hover {
   background-color: #c82333;
+}
+
+.summary {
+  background-color: #f9f9f9;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.summary:hover {
+  background-color: #f1f1f1;
+}
+
+.details {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.closed {
+  color: #dc3545;
+}
+
+.open {
+  color: #28a745;
 }
